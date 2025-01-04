@@ -1,6 +1,6 @@
 <html>
   <body>
-    <form id="myForm" method="GET" action="https://hackerone.com/stories-of-2024/new">
+    <form id="myForm" method="POST" action="https://hackerone.com/stories-of-2024/new">
       <input type="submit" value="Submit request" />
     </form>
 
@@ -12,7 +12,7 @@
         // Create a FormData object to gather the form data
         const formData = new FormData(document.getElementById("myForm"));
 
-        // Send the form data using fetch
+        // Send the form data using fetch with a fully qualified URL
         fetch("https://hackerone.com/stories-of-2024/new", {
           method: "POST",
           body: formData,
